@@ -1,0 +1,147 @@
+---
+title: "Machine Learning (Andrew Ng) Week One"
+author: "Gino Shaw"
+date: "2018楠<9e><b4>3閺<88><88>1閺<83><a5>"
+output:
+  html_document:
+    code_folding: show
+    fig_height: 4
+    fig_width: 7
+    number_sections: yes
+    toc: yes
+  pdf_document:
+    toc: yes
+  word_document:
+    toc: yes
+---
+
+```{r setup, include = FALSE, echo = FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+#   Overview 
+
+##  Machine Learning Definition
+
+
+  * 老版本 - Arthur Samuel(1959年老版本)
+  
+    The field of study that gives computers the ability to learn without being explicitly programmed.
+    
+    机器学习是研究，电脑在不被明确编程的情况下获得学习能力。
+
+  * 新版本 - Tom Mitchell
+  
+    A computer program is said to learn from experience E with respect to some class of tasks T and performance measure P, if its performance at tasks in T, as measured by P, improves with experience E.
+    
+    计算机程序在完成任务T时，根据经验E，获得评判标准P下的提高。
+
+
+## Machine Learning Classification
+
+
+###Supervised Learning 监督学习
+
+  In supervised learning, we are given a data set and already know what our correct output should look like, having the idea that there is a relationship between the input and the output.
+  
+  探究的数据样本有明确的输入输出对应关系。
+
+  * regression 回归问题
+    
+      In a regression problem, we are trying to predict results within a continuous output, meaning that we are trying to map input variables to some continuous function.
+      
+      预测结果连续。
+  
+  * classification 分类问题
+  
+      In a classification problem, we are instead trying to predict results in a discrete output.
+      
+      预测结果离散。
+
+###Unsupervised Learning 无监督学习
+
+  Unsupervised learning, on the other hand, allows us to approach problems with little or no idea what our results should look like. We can derive structure from data where we don't necessarily know the effect of the variables.
+
+  无监督学习，允许我们在对输入输出结果没有明确对应关系的情况下，探究变量对于数据结构的影响。
+  
+  * Clustering 聚类分析
+  
+    We can derive this structure by clustering the data based on relationships among the variables in the data.
+    
+    基于数据间的关系做聚类。
+  
+  * Non-Clustering 非聚类分析
+  
+    The "Cocktail Party Algorithm", which can find structure in messy data.
+    
+    鸡尾酒会算法，在混乱的数据中寻找数据结构。
+  
+# Linear Regression with One Variable 
+
+*  Model Representation 模型准备 
+
+    Univariate linear regression is used when you want to predict a single output value y from a single input value x. We're doing supervised learning here, so that means we already have an idea about what the input/output cause and effect should be.
+    
+    仅根据单一输入变量预测单一输出变量。
+  
+* The Hypothesis Function 假设方程
+
+      $$\hat{y}=h_\theta(x)=\theta_0+\theta_1x$$
+    
+    利用假设方程$h_\theta(x)$去预测输入变量与输出变量的关系。
+    我们试图改变$\theta_0$和$\theta_1$去拟合关系。
+    
+# Cost Function 
+
+We can measure the accuracy of our hypothesis function by using a cost function. This takes an average (actually a fancier version of an average) of all the results of the hypothesis with inputs from x's compared to the actual output y's.
+
+利用成本函数去测量我们假设方程预测的准确性。
+
+$$J(\theta_0,\theta_1) = \frac{1}{2m}\sum_{i=1}^m(\hat{y}^{(i)}-y^{(i)})^2= \frac{1}{2m}\sum_{i=1}^m(h_\theta(x^{(i)})-y^{(i)})^2$$
+    
+    
+$\frac{1}{2m}$为便于计算梯度下降(作为平方的导数项将剔除$\frac{1}{2}$)
+
+$h_\theta(x^i)-y^i$为预测值与实际值的偏差
+
+# Gradient Descent
+
+So we have our hypothesis function and we have a way of measuring how well it fits into the data. Now we need to estimate the parameters in hypothesis function. That's where gradient descent comes in.
+
+利用梯度下降算法去预测假设方程的参数$\theta_j$。
+
+The way we do this is by taking the derivative (the tangential line to a function) of our cost function. The slope of the tangent is the derivative at that point and it will give us a direction to move towards. We make steps down the cost function in the direction with the steepest descent, and the size of each step is determined by the parameter α, which is called the learning rate.
+
+通过对成本函数的微分做梯度下降。每一梯度的跨度大小，是根据学习率 α决定。
+
+$$\theta_j := \theta_j - \alpha\frac{\partial}{\partial\theta_j}J(\theta_0,\theta_1)$$
+**梯度下降不断迭代直到$\theta_j$收敛，即微分项等于0时**
+
+$j$表示特征索引标识
+
+$\frac{\partial}{\partial\theta_j}J(\theta_0,\theta_1)$表示在$j$特征上的微分
+
+## Gradient Descent for Linear Regression 线性回归的梯度下降
+
+We can substitute our actual cost function and our actual hypothesis function and modify the equation to (the derivation of the formulas are out of the scope of this course, but a really great one can be found here):
+
+我们利用成本函数和假设函数改变梯度下降公式。
+
+
+$$\theta_0 := \theta_0 - \alpha\frac{1}{m}\sum_{i=1}^m(h_\theta(x^{(i)}) - y^{(i)})$$
+$$\theta_1 := \theta_1 - \alpha\frac{1}{m}\sum_{i=1}^m(h_\theta(x^{(i)}) - y^{(i)}) \cdot x_1$$
+
+
+
+$\theta_0$和$\theta_1$需同时迭代；我们从假设函数开始，重复迭代梯度下降公式，可以获得更准确的假设函数。
+
+$$
+\begin{aligned}
+\frac{\alpha}{2m}\frac{\partial}{\partial\theta_j}\sum_{i=1}^m(h_\theta(x^{(i)})-y^{(i)})^2  & =\frac{\alpha}{2m}\sum_{i=1}^m2(h_\theta(x^{(i)})-y^{(i)})\frac{\partial}{\partial\theta_j}(h_\theta(x^{(i)})-y^{(i)}) \\
+& = \frac{\alpha}{m}\sum_{i=1}^m(h_\theta(x^{(i)})-y^{(i)})\frac{\partial}{\partial\theta_j}(h_\theta(x^{(i)})-y^{(i)}) \\
+& = \frac{\alpha}{m}\sum_{i=1}^m(h_\theta(x^{(i)})-y^{(i)})x_j^{(i)}
+\end{aligned}
+$$
+
+
