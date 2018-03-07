@@ -1,7 +1,7 @@
 ---
 title: "Machine Learning (Andrew Ng) Week One"
 author: "Gino Shaw"
-date: "2018楠<9e><b4>3閺<88><88>1閺<83><a5>"
+date: "2018年3月1日"
 output:
   html_document:
     code_folding: show
